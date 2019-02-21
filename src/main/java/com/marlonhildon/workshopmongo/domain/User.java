@@ -1,8 +1,11 @@
 package com.marlonhildon.workshopmongo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 // @Document serve para dizer que a classe faz relação a uma coleção de um banco do MongoDB. O parêntese é opcional.
@@ -16,6 +19,9 @@ public class User implements Serializable {
 	private String id;
 	private String name;
 	private String email;
+	
+	@DBRef(lazy = true) // Anotação: diz que a lista é uma referência. O lazy=true diz que o post será carregado somente
+	private List<Post> posts = new ArrayList<>();	// se for acessado. Então, se carregar o usuário, só os dados deste virão.
 	
 	public User() {
 	}
@@ -50,6 +56,14 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
